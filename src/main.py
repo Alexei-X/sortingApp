@@ -14,7 +14,17 @@ def selection_sort_algorithm(win : tkinter.Tk, numb_list : list[int], canvas, ma
         time.sleep(speed*0.001)
 
 def insertion_sort_algorithm(win : tkinter.Tk, numb_list : list[int], canvas, max_size : int, speed : int = 0):
-    pass
+    for i in range(1, len(numb_list)):
+        save = numb_list[i]
+        j = i -1
+        while j >= 0 and numb_list[j] > save:
+            numb_list[j+1] = numb_list[j]
+            j -= 1
+        numb_list[j+1] = save
+        display_list(numb_list, canvas, max_size, j+1)
+        win.update()
+        time.sleep(speed*0.001)
+
 
 def create_sorting_window(title : str, dimensions : str, sort_type: str) -> tkinter.Tk:
     win = create_window(title, dimensions, "black")
@@ -125,7 +135,7 @@ def pathfinding_algo(win : tkinter.Tk):
     pathfinding_window.mainloop()
 
 def main():
-    main_window = create_window("Algorithm Visualisation App (made by Alex Bataille)", "1200x900",
+    main_window = create_window("Algorithm Visualisation (made by Alex Bataille)", "1200x900",
                                 "black")
 
 
