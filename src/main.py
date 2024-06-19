@@ -3,6 +3,15 @@ import time
 import random
 
 
+def display_sorted_list(win: tkinter.Tk, canvas: tkinter.Canvas, numb_list: list[float], max_size: int):
+    canvas.delete("all")
+    n = 800 / max_size if max_size != 0 else 1
+    for index in range(len(numb_list)):
+        color = "green"
+        canvas.create_line((index + 1) * n, 800, (index + 1) * n, 800 - numb_list[index], fill=color, width=n)
+        win.update()
+
+
 def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
     for i in range(1, len(numb_list)):
         save = numb_list[i]
@@ -14,6 +23,7 @@ def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, ma
         display_list(numb_list, canvas, max_size, j + 1)
         win.update()
         time.sleep(speed * 0.001)
+    display_sorted_list(win, canvas, numb_list, max_size)
 
 
 def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
@@ -26,6 +36,7 @@ def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, ma
         numb_list[i], numb_list[current_minimum] = numb_list[current_minimum], numb_list[i]
         win.update()
         time.sleep(speed * 0.001)
+    display_sorted_list(win, canvas, numb_list, max_size)
 
 
 def bubble_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
@@ -38,6 +49,7 @@ def bubble_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_s
         display_list(numb_list, canvas, max_size, current_min)
         win.update()
         time.sleep(speed * 0.001)
+    display_sorted_list(win, canvas, numb_list, max_size)
 
 
 def counting_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
@@ -59,7 +71,7 @@ def counting_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max
         display_list(output + [0] * (len(numb_list) - len(output)), canvas, max_size, counts[int(num)])
         win.update()
         time.sleep(speed * 0.001)
-    return output
+    display_sorted_list(win, canvas, numb_list, max_size)
 
 
 def create_sorting_window(title: str, dimensions: str, sort_type: str) -> tkinter.Tk:
