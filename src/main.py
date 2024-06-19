@@ -4,7 +4,7 @@ import time
 
 
 def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[int], canvas, max_size: int, speed: int = 0):
-    for i in range(len(numb_list) - 1):
+    for i in range(len(numb_list)):
         current_minimum = i
         for j in range(i + 1, len(numb_list)):
             if numb_list[j] < numb_list[current_minimum]:
@@ -13,6 +13,7 @@ def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[int], canvas, max_
         numb_list[i], numb_list[current_minimum] = numb_list[current_minimum], numb_list[i]
         win.update()
         time.sleep(speed * 0.001)
+    print(numb_list)
 
 
 def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[int], canvas, max_size: int, speed: int = 0):
@@ -31,7 +32,7 @@ def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[int], canvas, max_
 def create_sorting_window(title: str, dimensions: str, sort_type: str) -> tkinter.Tk:
     win = create_window(title, dimensions, "black")
 
-    canvas = tkinter.Canvas(win, width=900, height=900, bg="black")
+    canvas = tkinter.Canvas(win, width=800, height=800, bg="black")
     canvas.pack(side=tkinter.LEFT)
 
     l_text = tkinter.StringVar()
@@ -68,16 +69,16 @@ def create_sorting_window(title: str, dimensions: str, sort_type: str) -> tkinte
 
 def display_list(numb_list: list, canvas, max_size: int, current_index=None):
     canvas.delete("all")
-    n = 900 / max_size if max_size != 0 else 1
+    n = 800 / max_size if max_size != 0 else 1
     for index in range(len(numb_list)):
         color = "red" if index == current_index else "white"
-        canvas.create_line(1 + round(index * n), 900, 1 + round(index * n), numb_list[index], fill=color, width=n)
+        canvas.create_line((index+1)*n, 800, (index+1)*n, 800 - numb_list[index], fill=color, width=n)
 
 
 def shuffle_list(canvas, max_size: int) -> list[int]:
     all_lines = []
-    for i in range(1, max_size):
-        all_lines.append(i)
+    for i in range(1, max_size + 1):
+        all_lines.append(i*(800/max_size))
     random.shuffle(all_lines)
     display_list(all_lines, canvas, max_size)
     return all_lines
