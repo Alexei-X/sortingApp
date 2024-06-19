@@ -1,19 +1,6 @@
 import tkinter
-import random
 import time
-
-
-def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
-    for i in range(len(numb_list)):
-        current_minimum = i
-        for j in range(i + 1, len(numb_list)):
-            if numb_list[j] < numb_list[current_minimum]:
-                current_minimum = j
-        display_list(numb_list, canvas, max_size, current_minimum)
-        numb_list[i], numb_list[current_minimum] = numb_list[current_minimum], numb_list[i]
-        win.update()
-        time.sleep(speed * 0.001)
-    print(numb_list)
+import random
 
 
 def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
@@ -27,6 +14,52 @@ def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, ma
         display_list(numb_list, canvas, max_size, j + 1)
         win.update()
         time.sleep(speed * 0.001)
+
+
+def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
+    for i in range(len(numb_list)):
+        current_minimum = i
+        for j in range(i + 1, len(numb_list)):
+            if numb_list[j] < numb_list[current_minimum]:
+                current_minimum = j
+        display_list(numb_list, canvas, max_size, current_minimum)
+        numb_list[i], numb_list[current_minimum] = numb_list[current_minimum], numb_list[i]
+        win.update()
+        time.sleep(speed * 0.001)
+
+
+def bubble_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
+    for i in range(len(numb_list), 0, -1):
+        current_min = i
+        for j in range(i - 1):
+            if numb_list[j] > numb_list[j + 1]:
+                numb_list[j], numb_list[j + 1] = numb_list[j + 1], numb_list[j]
+                current_min = j
+        display_list(numb_list, canvas, max_size, current_min)
+        win.update()
+        time.sleep(speed * 0.001)
+
+
+def counting_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
+    # Trouver l'élément maximum dans la liste pour connaître la plage des comptes
+    max_val = int(max(numb_list))
+    # Initialiser le tableau de comptage avec tous les zéros
+    counts = [0] * (max_val + 1)
+    # Stocker le nombre d'occurrences de chaque élément dans le tableau de comptage
+    for num in numb_list:
+        counts[int(num)] += 1
+    # Modifier counts[i] pour qu'il contienne maintenant la position réelle de cet élément dans le tableau de sortie
+    for i in range(1, len(counts)):
+        counts[i] += counts[i - 1]
+    # Construire le tableau de sortie
+    output = [0] * len(numb_list)
+    for num in reversed(numb_list):
+        output[counts[int(num)] - 1] = num
+        counts[int(num)] -= 1
+        display_list(output + [0] * (len(numb_list) - len(output)), canvas, max_size, counts[int(num)])
+        win.update()
+        time.sleep(speed * 0.001)
+    return output
 
 
 def create_sorting_window(title: str, dimensions: str, sort_type: str) -> tkinter.Tk:
@@ -60,6 +93,14 @@ def create_sorting_window(title: str, dimensions: str, sort_type: str) -> tkinte
         launch_button.config(
             command=lambda: insertion_sort_algorithm(win, shuffle_list(canvas, int(lines_number.get())),
                                                      canvas, int(lines_number.get()), int(speed.get())))
+    elif sort_type == "bubble":
+        launch_button.config(
+            command=lambda: bubble_sort_algorithm(win, shuffle_list(canvas, int(lines_number.get())),
+                                                  canvas, int(lines_number.get()), int(speed.get())))
+    elif sort_type == "counting":
+        launch_button.config(
+            command=lambda: counting_sort_algorithm(win, shuffle_list(canvas, int(lines_number.get())),
+                                                    canvas, int(lines_number.get()), int(speed.get())))
     else:
         pass
     launch_button.place(x=1000, y=100)
@@ -72,16 +113,29 @@ def display_list(numb_list: list, canvas, max_size: int, current_index=None):
     n = 800 / max_size if max_size != 0 else 1
     for index in range(len(numb_list)):
         color = "red" if index == current_index else "white"
-        canvas.create_line((index+1)*n, 800, (index+1)*n, 800 - numb_list[index], fill=color, width=n)
+        canvas.create_line((index + 1) * n, 800, (index + 1) * n, 800 - numb_list[index], fill=color, width=n)
 
 
 def shuffle_list(canvas, max_size: int) -> list[float]:
     all_lines = []
     for i in range(1, max_size + 1):
-        all_lines.append(i*(800/max_size))
+        all_lines.append(i * (800 / max_size))
     random.shuffle(all_lines)
     display_list(all_lines, canvas, max_size)
     return all_lines
+
+
+def insertion_display(win: tkinter.Tk):
+    win.destroy()
+
+    insertion_window = create_sorting_window("Insertion Sort", "1200x900", "insertion")
+
+    complexity_text = tkinter.StringVar()
+    complexity_text.set("Complexity : O(n^2)")
+    complexity_label = tkinter.Label(insertion_window, textvariable=complexity_text)
+    complexity_label.place(x=920, y=500)
+
+    insertion_window.mainloop()
 
 
 def selection_display(win: tkinter.Tk):
@@ -96,17 +150,28 @@ def selection_display(win: tkinter.Tk):
     selection_window.mainloop()
 
 
-def insertion_display(win: tkinter.Tk):
+def bubble_display(win: tkinter.Tk):
     win.destroy()
-
-    insertion_window = create_sorting_window("Insertion Sort", "1200x900", "insertion")
+    bubble_window = create_sorting_window("Bubble Sort", "1200x900", "bubble")
 
     complexity_text = tkinter.StringVar()
     complexity_text.set("Complexity : O(n^2)")
-    complexity_label = tkinter.Label(insertion_window, textvariable=complexity_text)
+    complexity_label = tkinter.Label(bubble_window, textvariable=complexity_text)
     complexity_label.place(x=920, y=500)
 
-    insertion_window.mainloop()
+    bubble_window.mainloop()
+
+
+def counting_display(win: tkinter.Tk):
+    win.destroy()
+    counting_window = create_sorting_window("Counting Sort", "1200x900", "counting")
+
+    complexity_text = tkinter.StringVar()
+    complexity_text.set("Complexity : O(n + k)")
+    complexity_label = tkinter.Label(counting_window, textvariable=complexity_text)
+    complexity_label.place(x=920, y=500)
+
+    counting_window.mainloop()
 
 
 def create_window(title: str, dimensions: str, bg_color: str) -> tkinter.Tk:
@@ -138,6 +203,14 @@ def sorting_algo(win: tkinter.Tk):
     insertion_sort_button = tkinter.Button(sorting_window, text="Insertion Sort", width=20, height=5,
                                            command=lambda: insertion_display(sorting_window))
     insertion_sort_button.place(x=400, y=100)
+
+    bubble_sort_button = tkinter.Button(sorting_window, text="Bubble Sort", width=20, height=5,
+                                        command=lambda: bubble_display(sorting_window))
+    bubble_sort_button.place(x=700, y=100)
+
+    counting_sort_button = tkinter.Button(sorting_window, text="Counting Sort", width=20, height=5,
+                                          command=lambda: counting_display(sorting_window))
+    counting_sort_button.place(x=100, y=300)
 
     sorting_window.mainloop()
 
