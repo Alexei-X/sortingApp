@@ -8,95 +8,84 @@ def selection_sort_algorithm(win : tkinter.Tk, numb_list : list[int], canvas, ma
         for j in range(i+1,len(numb_list)):
             if numb_list[j] < numb_list[current_minimum]:
                 current_minimum = j
-        display_list(win, numb_list, canvas, max_size, current_minimum)
+        display_list(numb_list, canvas, max_size, current_minimum)
         numb_list[i], numb_list[current_minimum] = numb_list[current_minimum], numb_list[i]
         win.update()
         time.sleep(speed*0.001)
 
-def display_list(win : tkinter.Tk, numb_list : list, canvas, max_size : int, current_index=None):
+def insertion_sort_algorithm(win : tkinter.Tk, numb_list : list[int], canvas, max_size : int, speed : int = 0):
+    pass
+
+def create_sorting_window(title : str, dimensions : str, sort_type: str) -> tkinter.Tk:
+    win = create_window(title, dimensions, "black")
+
+    canvas = tkinter.Canvas(win, width=900, height=900, bg="black")
+    canvas.pack(side=tkinter.LEFT)
+
+    l_text = tkinter.StringVar()
+    l_text.set("Number of lines : ")
+    l_label = tkinter.Label(win, textvariable=l_text)
+    l_label.place(x=920, y=300)
+
+    lines_number = tkinter.Entry(win)
+    lines_number.place(x=1050, y=300)
+
+    s_text = tkinter.StringVar()
+    s_text.set("Slowness : ")
+    s_label = tkinter.Label(win, textvariable=s_text)
+    s_label.place(x=920, y=400)
+
+    speed = tkinter.Entry(win)
+    speed.place(x=1050, y=400)
+
+    launch_button = tkinter.Button(win, text="Launch", width=10, height=3)
+    if sort_type == "selection":
+        launch_button.config(command=lambda: selection_sort_algorithm(win, shuffle_list(canvas, int(lines_number.get())),
+                             canvas, int(lines_number.get()), int(speed.get())))
+    elif sort_type == "insertion":
+        launch_button.config(command=lambda: insertion_sort_algorithm(win, shuffle_list(canvas, int(lines_number.get())),
+                             canvas, int(lines_number.get()), int(speed.get())))
+    else:
+        pass
+    launch_button.place(x=1000, y=100)
+
+    return win
+
+def display_list(numb_list : list, canvas, max_size : int, current_index=None):
     canvas.delete("all")
     n = 900/max_size if max_size != 0 else 1
     for index in range(len(numb_list)):
         color = "red" if index == current_index else "white"
         canvas.create_line(1 + round(index*n), 900, 1 + round(index*n), numb_list[index], fill=color, width=n)
 
-def shuffle_list(win : tkinter.Tk, canvas, max_size : int) -> list[int]:
+def shuffle_list(canvas, max_size : int) -> list[int]:
     allLines = []
     for i in range(1, max_size):
         allLines.append(i)
     random.shuffle(allLines)
-    display_list(win, allLines, canvas, max_size)
+    display_list(allLines, canvas, max_size)
     return allLines
 
 def selection_display(win : tkinter.Tk):
     win.destroy()
-    selection_window = create_window("Selection Sort", "1200x900", "black")
-
-    canvas = tkinter.Canvas(selection_window, width=900, height=900, bg="black")
-    canvas.pack(side=tkinter.LEFT)
-
-    l_text = tkinter.StringVar()
-    l_text.set("Number of lines : ")
-    l_label = tkinter.Label(selection_window, textvariable=l_text)
-    l_label.place(x=920, y=300)
-
-    lines_number = tkinter.Entry(selection_window)
-    lines_number.place(x=1050, y=300)
-
-    s_text = tkinter.StringVar()
-    s_text.set("Slowness : ")
-    s_label = tkinter.Label(selection_window, textvariable=s_text)
-    s_label.place(x=920, y=400)
-
-    speed = tkinter.Entry(selection_window)
-    speed.place(x=1050, y=400)
+    selection_window = create_sorting_window("Selection Sort", "1200x900", "selection")
 
     complexity_text = tkinter.StringVar()
     complexity_text.set("Complexity : O(n^2)")
     complexity_label = tkinter.Label(selection_window, textvariable=complexity_text)
     complexity_label.place(x=920, y=500)
 
-    selection_launch_button = tkinter.Button(selection_window, text="Launch", width=10, height=3, command=lambda:
-                                            selection_sort_algorithm(selection_window, shuffle_list(selection_window,
-                                            canvas, int(lines_number.get())), canvas, int(lines_number.get()), int(speed.get())))
-    selection_launch_button.place(x=1000, y=100)
-
     selection_window.mainloop()
 
 def insertion_display(win : tkinter.Tk):
     win.destroy()
 
-    insertion_window = create_window("Insertion Sort", "1200x900", "black")
-
-    canvas = tkinter.Canvas(insertion_window, width=900, height=900, bg="black")
-    canvas.pack(side=tkinter.LEFT)
-
-    l_text = tkinter.StringVar()
-    l_text.set("Number of lines : ")
-    l_label = tkinter.Label(insertion_window, textvariable=l_text)
-    l_label.place(x=920, y=300)
-
-    lines_number = tkinter.Entry(insertion_window)
-    lines_number.place(x=1050, y=300)
-
-    s_text = tkinter.StringVar()
-    s_text.set("Slowness : ")
-    s_label = tkinter.Label(insertion_window, textvariable=s_text)
-    s_label.place(x=920, y=400)
-
-    speed = tkinter.Entry(insertion_window)
-    speed.place(x=1050, y=400)
+    insertion_window = create_sorting_window("Insertion Sort", "1200x900", "insertion")
 
     complexity_text = tkinter.StringVar()
     complexity_text.set("Complexity : O(n^2)")
     complexity_label = tkinter.Label(insertion_window, textvariable=complexity_text)
     complexity_label.place(x=920, y=500)
-
-    selection_launch_button = tkinter.Button(insertion_window, text="Launch", width=10, height=3, command=lambda:
-    selection_sort_algorithm(insertion_window, shuffle_list(insertion_window,
-                                                            canvas, int(lines_number.get())), canvas,
-                             int(lines_number.get()), int(speed.get())))
-    selection_launch_button.place(x=1000, y=100)
 
     insertion_window.mainloop()
 def create_window(title : str, dimensions : str, bg_color : str) -> tkinter.Tk:
