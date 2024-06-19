@@ -3,7 +3,7 @@ import random
 import time
 
 
-def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[int], canvas, max_size: int, speed: int = 0):
+def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
     for i in range(len(numb_list)):
         current_minimum = i
         for j in range(i + 1, len(numb_list)):
@@ -16,7 +16,7 @@ def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[int], canvas, max_
     print(numb_list)
 
 
-def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[int], canvas, max_size: int, speed: int = 0):
+def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
     for i in range(1, len(numb_list)):
         save = numb_list[i]
         j = i - 1
@@ -75,7 +75,7 @@ def display_list(numb_list: list, canvas, max_size: int, current_index=None):
         canvas.create_line((index+1)*n, 800, (index+1)*n, 800 - numb_list[index], fill=color, width=n)
 
 
-def shuffle_list(canvas, max_size: int) -> list[int]:
+def shuffle_list(canvas, max_size: int) -> list[float]:
     all_lines = []
     for i in range(1, max_size + 1):
         all_lines.append(i*(800/max_size))
