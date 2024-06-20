@@ -6,10 +6,11 @@ import random
 def display_sorted_list(win: tkinter.Tk, canvas: tkinter.Canvas, numb_list: list[float], max_size: int):
     canvas.delete("all")
     n = 800 / max_size if max_size != 0 else 1
+    color = "green"
     for index in range(len(numb_list)):
-        color = "green"
         canvas.create_line((index + 1) * n, 800, (index + 1) * n, 800 - numb_list[index], fill=color, width=n)
-        win.update()
+        if index % 5 == 0:
+            win.update()
 
 
 def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
@@ -71,7 +72,7 @@ def counting_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max
         display_list(output + [0] * (len(numb_list) - len(output)), canvas, max_size, counts[int(num)])
         win.update()
         time.sleep(speed * 0.001)
-    display_sorted_list(win, canvas, numb_list, max_size)
+    display_sorted_list(win, canvas, output, max_size)
 
 
 def create_sorting_window(title: str, dimensions: str, sort_type: str) -> tkinter.Tk:
