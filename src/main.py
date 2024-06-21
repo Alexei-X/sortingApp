@@ -3,6 +3,7 @@ from Visualizer import Visualizer
 from song import *
 import time
 
+
 def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_size: int, speed: int = 0):
     for i in range(1, len(numb_list)):
         save = numb_list[i]
@@ -11,7 +12,8 @@ def insertion_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, ma
             numb_list[j + 1] = numb_list[j]
             j -= 1
         numb_list[j + 1] = save
-        play_sound(numb_list[j], max_size)
+        if visualizer.sound:
+            play_sound(numb_list[j], max_size)
         visualizer.display_list(numb_list, canvas, max_size, j + 1)
         win.update()
         time.sleep(speed * 0.001)
@@ -24,7 +26,7 @@ def selection_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, ma
         for j in range(i + 1, len(numb_list)):
             if numb_list[j] < numb_list[current_minimum]:
                 current_minimum = j
-                if j%3 == 0:
+                if visualizer.sound and j%3 == 0:
                     play_sound(numb_list[j], max_size)
         visualizer.display_list(numb_list, canvas, max_size, current_minimum)
         numb_list[i], numb_list[current_minimum] = numb_list[current_minimum], numb_list[i]
@@ -40,7 +42,8 @@ def bubble_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max_s
             if numb_list[j] > numb_list[j + 1]:
                 numb_list[j], numb_list[j + 1] = numb_list[j + 1], numb_list[j]
                 current_min = j
-                play_sound(numb_list[current_min], max_size)
+                if visualizer.sound:
+                    play_sound(numb_list[current_min], max_size)
         visualizer.display_list(numb_list, canvas, max_size, current_min)
         win.update()
         time.sleep(speed * 0.001)
@@ -58,7 +61,8 @@ def counting_sort_algorithm(win: tkinter.Tk, numb_list: list[float], canvas, max
     for num in reversed(numb_list):
         output[counts[int(num)] - 1] = num
         counts[int(num)] -= 1
-        play_sound(output[counts[int(num)]], max_size)
+        if visualizer.sound:
+            play_sound(output[counts[int(num)]], max_size)
         visualizer.display_list(output + [0] * (len(numb_list) - len(output)), canvas, max_size, counts[int(num)])
         win.update()
         time.sleep(speed * 0.001)

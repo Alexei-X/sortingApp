@@ -10,6 +10,14 @@ class Visualizer:
         self.bubble_sort_algorithm = bubble_sort_algorithm
         self.counting_sort_algorithm = counting_sort_algorithm
 
+    sound = True
+
+    def change_sound(self):
+        if self.sound:
+            self.sound = False
+        else:
+            self.sound = True
+
     def display_sorted_list(self, win: tkinter.Tk, canvas: tkinter.Canvas, numb_list: list[float], max_size: int):
         canvas.delete("all")
         n = 800 / max_size if max_size != 0 else 1
@@ -110,6 +118,10 @@ class Visualizer:
                                         canvas, int(lines_number.get()), int(speed.get())))
 
         launch_button.place(x=1000, y=100)
+
+        mute_button = tkinter.Button(win, text="Sound", width=10, height=3)
+        mute_button.config(command=self.change_sound)
+        mute_button.place(x=1000, y=600)
 
         return win
 
